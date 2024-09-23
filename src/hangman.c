@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 void startgame(int *winstreak, char*);
-int game_mode_menu(int);
+int game_mode_menu();
 int lives_generator(int);
 void getBuffer(char *, char*);
 int line_generator();
@@ -31,9 +31,7 @@ int main (int argc, char* argv[])
 	if(argc > 2){
 	  return 0;
 	}
-
 	char* path = argv[1];
-
 	do
 	{
 		system("clear");
@@ -54,7 +52,7 @@ int main (int argc, char* argv[])
 void startgame(int *streak, char* path)
 {
 	system("clear");
-	unsigned int lives = game_mode_menu(lives);
+	unsigned int lives = game_mode_menu();
 	system("clear");
 	instructions();
 	char *Buffer, *HiddenArray, *InputHistory;
@@ -65,7 +63,7 @@ void startgame(int *streak, char* path)
 	InputHistory = (char*)calloc(26, sizeof(char));
 	char letter;
 	int answer;
-	unsigned int correct = 0;
+	int correct = 0;
 	spacebar_detector(Buffer, HiddenArray, &correct);
 	while(lives>0 && correct != strlen(Buffer))
 	{
@@ -99,12 +97,18 @@ void startgame(int *streak, char* path)
 	countdown();
 }
 
-int game_mode_menu(int mode)
+int game_mode_menu()
 {
+	int mode;
+	do
+	{
+	system("clear");
 	printf("                   CHOOSE YOUR GAME MODE\n");
 	printf("1) Easy (8 lives)    2) Normal (5 lives)   3) Hard (3 lives)\n\n");
 	printf("Insert game mode: ");
 	scanf("%d", &mode);
+	}
+	while(lives_generator(mode)!=0);
 	return lives_generator(mode);
 }
 
@@ -114,7 +118,8 @@ int lives_generator(int input)
 	{
 		case 1: return 8; break;
 		case 2: return 5; break;
-		case 3: return 3;
+		case 3: return 3; break;
+		default: return 0; 
 	}
 }
 
